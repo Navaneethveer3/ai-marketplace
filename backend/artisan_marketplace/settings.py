@@ -26,9 +26,9 @@ load_dotenv()
 SECRET_KEY = 'django-insecure-^qstwxig=^7%**vg_@37ylxxe@3v9)ah^1h#*0#8pun_l!o@pq'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["https://aiartisansmarketplace.onrender.com"]
 
 
 # Application definition
