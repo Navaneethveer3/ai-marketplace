@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from artisans.views import ArtisanViewSet, ProductViewSet, CartViewSet, OrderViewSet, ai_generate
+from artisans.views import ArtisanViewSet, ProductViewSet, CartViewSet, OrderViewSet
 from django.conf import settings
 from django.conf.urls.static import static
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
@@ -42,7 +42,6 @@ urlpatterns = [
     path("api/cart/remove/", cart_remove, name="cart-remove"),
     path("api/orders/", order_list, name="order-list"),
     path("api/orders/checkout/", order_checkout, name="order-checkout"),
-    path("api/ai/generate/", ai_generate),
      path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
