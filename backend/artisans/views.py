@@ -74,14 +74,7 @@ def ai_generate(request):
     except Exception as e:
         return Response({"error": str(e)}, status=500)
 
-@api_view(["POST"])
-def ai_generate(request):
-    prompt = request.data.get("prompt")
-    if not prompt:
-        return Response({"error": "Prompt required"}, status=400)
 
-    ai_text = generate_ai_text(prompt)
-    return Response({"result": ai_text})
 
 class CartViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
