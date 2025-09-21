@@ -24,16 +24,11 @@ class ArtisanSerializer(serializers.ModelSerializer):
         artisan = Artisan.objects.create(**validated_data)
 
         # auto-generate tagline if missing
-        if not artisan.ai_tagline and artisan.story:
-            artisan.ai_tagline = f"Creative soul: {artisan.story[:50]}..."
-            artisan.save()
+        
 
         for p in products_data:
             product = Product.objects.create(artisan=artisan, **p)
-            if not product.ai_description and product.description:
-                product.ai_description = f"Handcrafted beauty: {product.description[:50]}..."
-                product.save()
-
+            
         return artisan
 
     def update(self, instance, validated_data):
