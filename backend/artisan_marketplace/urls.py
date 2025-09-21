@@ -42,8 +42,6 @@ urlpatterns = [
     path("api/cart/remove/", cart_remove, name="cart-remove"),
     path("api/orders/", order_list, name="order-list"),
     path("api/orders/checkout/", order_checkout, name="order-checkout"),
-     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
-    path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
