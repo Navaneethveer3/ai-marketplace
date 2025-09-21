@@ -8,12 +8,6 @@ from .models import Artisan, Product, Cart, CartItem, Order
 from .serializers import ArtisanSerializer, ProductSerializer, CartSerializer, OrderSerializer
 #from .ai_utils import generate_ai_text
 import os
-import openai
-
-# Configure OpenAI API Key from ENV
-OPENAI_KEY = os.getenv("OPENAI_API_KEY")
-if OPENAI_KEY:
-    openai.api_key = OPENAI_KEY
 
 class ArtisanViewSet(viewsets.ModelViewSet):
     queryset = Artisan.objects.all().order_by("-id")
@@ -27,52 +21,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
 
 
-@api_view(["POST"])
-@permission_classes([AllowAny])
-def ai_generate(request):
-    """
-    Expect JSON:
-    {
-      "type": "product" | "story",
-      "input": "short product description or artisan story"
-    }
-    Returns generated marketing text (description, caption, tagline)
-    """
-    data = request.data
-    typ = data.get("type", "product")
-    text = data.get("input", "")
-    if not text:
-        return Response({"error": "No input provided"}, status=400)
 
-    if not OPENAI_KEY:
-        # graceful fallback
-        if typ == "product":
-            return Response({"description": f"Polished: {text}", "caption": f"Buy this: {text[:60]}..."})
-        else:
-            return Response({"summary": text[:200], "tagline": text[:60]})
-
-    try:
-        if typ == "product":
-            prompt = f"Rewrite and expand this product blurb into a short marketing product description (2 paragraphs), and provide 3 short social captions (one-line each). Input: {text}"
-            messages = [
-                {"role": "system", "content": "You are a helpful marketing assistant."},
-                {"role": "user", "content": prompt},
-            ]
-            resp = openai.ChatCompletion.create(model="gpt-4o-mini", messages=messages, max_tokens=300)
-            gen = resp["choices"][0]["message"]["content"]
-            # Basic parsing: return whole content as description (for prototype)
-            return Response({"generated": gen})
-        else:
-            prompt = f"Summarize this artisan story in 2-3 lines for a marketplace, and then provide a tagline (max 6 words). Input: {text}"
-            messages = [
-                {"role": "system", "content": "You are a creative content assistant."},
-                {"role": "user", "content": prompt},
-            ]
-            resp = openai.ChatCompletion.create(model="gpt-4o-mini", messages=messages, max_tokens=200)
-            gen = resp["choices"][0]["message"]["content"]
-            return Response({"generated": gen})
-    except Exception as e:
-        return Response({"error": str(e)}, status=500)
 
 
 
