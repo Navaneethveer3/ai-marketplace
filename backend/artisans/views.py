@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import get_object_or_404
 from .models import Artisan, Product, Cart, CartItem, Order
 from .serializers import ArtisanSerializer, ProductSerializer, CartSerializer, OrderSerializer
-from .ai_utils import generate_ai_text
+#from .ai_utils import generate_ai_text
 import os
 import openai
 
