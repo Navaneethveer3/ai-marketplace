@@ -29,8 +29,9 @@ class CartViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
 
     def get_cart(self):
-        # For prototype, always use dummy user with id=1
-        cart, _ = Cart.objects.get_or_create(user_id=1)
+    # Use a dummy user with username "demo"
+        user, _ = User.objects.get_or_create(username="demo")
+        cart, _ = Cart.objects.get_or_create(user=user)
         return cart
 
     def list(self, request):
