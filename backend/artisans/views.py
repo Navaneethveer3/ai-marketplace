@@ -97,4 +97,4 @@ class OrderViewSet(viewsets.ViewSet):
         # clear cart
         cart.items.all().delete()
 
-        return Response(OrderSerializer(order).data, status=201)201)
+        return Response(OrderSerializer(order).data, status=201)
