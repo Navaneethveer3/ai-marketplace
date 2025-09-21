@@ -28,8 +28,13 @@ class CartViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
 
     def get_cart(self):
-    # Use a dummy user with username "demo"
-        user, _ = User.objects.get_or_create(username="demo")
+    # Ensure dummy user exists
+        user, created = User.objects.get_or_create(username="demo")
+        if created:
+            user.set_password("demo1234")  # optional, only if you need login
+            user.save()
+        
+        # Ensure the cart exists
         cart, _ = Cart.objects.get_or_create(user=user)
         return cart
 
