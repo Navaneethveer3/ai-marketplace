@@ -71,21 +71,30 @@ class CartViewSet(viewsets.ViewSet):
 class OrderViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
 
+    def get_dummy_user(self):
+        user, created = User.objects.get_or_create(username="demo")
+        if created:
+            user.set_password("demo1234")  # optional, only if login is needed
+            user.save()
+        return user
+
     def list(self, request):
-        # Dummy user for prototype
-        orders = Order.objects.filter(user_id=1)
+        user = self.get_dummy_user()
+        orders = Order.objects.filter(user=user)
         return Response(OrderSerializer(orders, many=True).data)
 
     @action(detail=False, methods=["post"])
     def checkout(self, request):
-        cart, _ = Cart.objects.get_or_create(user_id=1)
+        user = self.get_dummy_user()
+        cart, _ = Cart.objects.get_or_create(user=user)
+
         if not cart.items.exists():
             return Response({"error": "Cart is empty"}, status=400)
 
         total = sum(item.product.price * item.quantity for item in cart.items.all())
-        order = Order.objects.create(user_id=1, total_price=total)
+        order = Order.objects.create(user=user, total_price=total)
 
         # clear cart
         cart.items.all().delete()
 
-        return Response(OrderSerializer(order).data, status=201)
+        return Response(OrderSerializer(order).data, status=201)201)
